@@ -28,5 +28,7 @@ def modExp(b, n, m):
     #   c mod m = (a * b) mod m
     for expoCounter in range(0, n):
         # c = (b * c) mod m
+        # works because with the proof eariler
+        # (b^n) mod m = (b * c) mod m
         c = (c * b) % m
     return c
