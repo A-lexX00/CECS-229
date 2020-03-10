@@ -95,6 +95,22 @@ def affineEncrypt(text, a, b):
             
     OUTPUT: The encrypted message as a string of characters
     """
-    pass
-    
+    if (gcd(a,b) != 1):
+        raise ValueError("The given values are not relatively prime")
+    else:
+        coded = letters2digits(text)
+        start = 0
+        letters = ""
+        for i in range(0, len(coded), 2):
+            digit = coded[start : start + 2]              # accessing the double digit
+            newNum = ((a * int(digit) + b) % 26)
+            strNewNum = ""
+            if (int(newNum) < 10):
+                    strNewNum = "0" + str(newNum)
+            else:
+                strNewNum = str(newNum)
+            letters += strNewNum                        # concatenating to the string of letters
+            start += 2                                    # updating the starting index for next digit
+    fullEncode = digits2letters(letters)
+    return fullEncode
 
