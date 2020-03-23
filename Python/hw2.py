@@ -97,6 +97,8 @@ def affineEncrypt(text, a, b):
     """
     if (gcd(a,b) != 1):
         raise ValueError("The given values are not relatively prime")
+    if (a > b):
+        raise ValueError("The given values are not relatively prime")
     else:
         coded = letters2digits(text)
         start = 0
@@ -114,3 +116,85 @@ def affineEncrypt(text, a, b):
     fullEncode = digits2letters(letters)
     return fullEncode
 
+def affineDecrypt(ciphertext, a, b):
+    """decrypts the string 'ciphertext', which was encrypted using an affine transformation key (a, b)
+    INPUT:  ciphertext - a string of encrypted letters
+            a - integer satisfying gcd(a, 26) = 1.  
+            b - integer 
+            
+    OUTPUT: The decrypted message as a string of characters
+    """
+    if (gcd(a,b) != 1):
+        raise ValueError("The given values are not relatively prime")
+    else:
+        coded = letters2digits(ciphertext)
+        start = 0
+        letters = ""
+        for i in range(0, len(coded), 2):
+            digit = coded[start : start + 2]
+            decodeA = modinv(a, 26)
+            newNum = ((decodeA * (int(digit) - b)) % 26)
+            strNewNum = ""
+            if (int(newNum) < 10):
+                strNewNum = "0" + str(newNum)
+            else:
+                strNewNum = str(newNum)
+            letters += strNewNum
+            start += 2
+    fullEncode = digits2letters(letters)
+    return fullEncode
+
+def encryptRSA(m, p, q, e):
+    """encrypts the plaintext m, using RSA and the key (p * q, e)
+    INPUT:  m - plaintext as a string of letters
+            p, q - prime numbers used as part of the key n = p * q to encrypt the ciphertext
+            e - integer satisfying gcd((p-1)*(q-1), e) = 1
+            
+    OUTPUT: The encrypted message as a string of digits
+    """
+    if (gcd((p - 1) * (q - 1), e ) != 1) :
+        raise ValueError("The given values are not relatively prime")
+    else :
+        coded = letters2digits(m)
+        start = 0
+        letters = ""
+        n = p * q
+        l = blocksize(n)
+        for i in range(0, len(coded), l):
+            digit = coded[start : start + l]
+            encryptingLetter = str(modExp(int(digit), e, n))
+            if(len(encryptingLetter) < l):
+                encryptingLetter = "0" + encryptingLetter
+            letters += encryptingLetter
+            start += l
+    return letters
+
+def decryptRSA(c, p, q, e):
+    """decrypts the cipher c, which was encrypted using the key (p * q, e)
+    INPUT:  c - ciphertext as a string of digits
+            p, q - prime numbers used as part of the key n = p * q to encrypt the ciphertext
+            e - integer satisfying gcd((p-1)*(q-1), e) = 1
+            
+    OUTPUT: The decrypted message as a string of letters
+    """
+    if (gcd((p - 1) * (q - 1), e ) != 1) :
+        raise ValueError("The given values are not relatively prime")
+    else :
+        start = 0
+        letters = ""
+        n = p * q
+        new_n = (p - 1) * (q - 1)
+        inverse_n = modinv(e, new_n)
+        l = blocksize(n)
+        coded = "".join(c.split())
+        for i in range(0, len(coded), l):
+            digit = coded[start : start + l]
+            encryptingLetter = str(modExp(int(digit), inverse_n, n))
+            if(len(encryptingLetter) < l):
+                encryptingLetter = "0" + encryptingLetter
+            letters += str(encryptingLetter)
+            start += l
+    fullDecode = digits2letters(letters)
+    return fullDecode
+        
+    
