@@ -17,11 +17,30 @@ Created on Wed Sep  9 13:29:46 2020
 
 import random
 
-p = 0.5
+p = 0.5 # Fair Coin
+game = [] # Record of one game
+win = 0 # Accumulator for number of wins
 
-for i in range(10):
-    r = random.uniform(0, 1)
-    if r < p:
-        print('T')
-    else:
-        print('H')
+N = 100000
+
+for i in range(N):
+
+    Coin = 0 # Initial value
+    
+    #----------------------------------------------------------
+    # Simulation
+    while Coin != 1:
+        r = random.uniform(0,1)
+        if r < p:
+            Coin = 0 # Tails
+        else:
+            Coin = 1 # Heads
+        game.append(Coin) # List of flips per game
+    L = len(game) # On last iteration number of flips
+    if L % 2 == 1: # Did it happen on an odd flip 
+        win = win + 1 # Total number of wins
+    game = [] # Reset
+    # End Simulation
+    #----------------------------------------------------------
+print('Toss a coin until you get heads \
+the probability the head is on an odd number flip is ',win/N,'.')
