@@ -16,6 +16,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		long startTime = System.nanoTime();
 		File f = new File("input.txt");
 		String input = "";
 		int arraySize = 0;
@@ -77,65 +78,30 @@ public class Main {
 				
 				// Two points
 				
-				// Are a and b divisible by the gcd
-				if(a.get(j).remainder(gcd).equals(zero) && b.get(j).remainder(gcd).equals(zero)) {
-					
-					// Keep track of a and b
+						// Keep track of a and b
 					BigInteger counter = a.get(j);	
 					BigInteger counterTwo = b.get(j);
 					
-					// Check to see if a AND b are divisible by the gcd
-					while(counter.mod(gcd).equals(zero) && counterTwo.mod(gcd).equals(zero))  {
-						if(gcdFound.containsKey(gcdTester))
-							gcdFound.replace(gcdTester, gcdFound.get(gcdTester) + 2);
-						else
-							gcdFound.put(gcdTester, 2);
-						
+					while(counter.mod(gcd).equals(zero) || counterTwo.mod(gcd).equals(zero))  {
+						if(counter.mod(gcd).equals(zero))  {
+							if(gcdFound.containsKey(gcdTester))
+								gcdFound.replace(gcdTester, gcdFound.get(gcdTester) + 1);
+							else
+								gcdFound.put(gcdTester, 1);
+							
 							counter = counter.divide(gcd);
+						}
+						if(counterTwo.mod(gcd).equals(zero))  {
+							if(gcdFound.containsKey(gcdTester))
+								gcdFound.replace(gcdTester, gcdFound.get(gcdTester) + 1);
+							else
+								gcdFound.put(gcdTester, 1);
+							
 							counterTwo = counterTwo.divide(gcd);
-					}
-				}
-				
-				// One point
-				
-					
-					// is A and only a divisible by the gcd
-				if (a.get(j).remainder(gcd).equals(zero) && !(b.get(j).remainder(gcd).equals(zero))) {
-						
-						// Keep track of a
-						BigInteger counter = a.get(j);		
-						
-						// is a divisible by gcd?
-						while(counter.mod(gcd).equals(zero)) {
-							if(gcdFound.containsKey(gcdTester))
-								gcdFound.replace(gcdTester, gcdFound.get(gcdTester) + 1);
-							else
-								gcdFound.put(gcdTester, 1);
-							
-								// divide gcd from a
-								counter = counter.divide(gcd);
 						}
 					}
-					// is B and only b divisible by the gcd
-				if (!(a.get(j).remainder(gcd).equals(zero)) && b.get(j).remainder(gcd).equals(zero)) {
-						
-						// Keep track of b
-						BigInteger counter = b.get(j);		
-						
-						// is b divisble by gcd?
-						while(counter.mod(gcd).equals(zero)) {
-							if(gcdFound.containsKey(gcdTester))
-								gcdFound.replace(gcdTester, gcdFound.get(gcdTester) + 1);
-							else
-								gcdFound.put(gcdTester, 1);
-							
-								// divide gcd from b
-								counter = counter.divide(gcd);
-						}
-					}
-					
+				}	
 			}
-		}
 		
 		PrintWriter writer;
 		try {
@@ -159,5 +125,8 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		long endTime = System.nanoTime();
+		long elapsed = (endTime - startTime)/ 1000000;
+		System.out.println("Time taken: " + elapsed);
 	}
 }
