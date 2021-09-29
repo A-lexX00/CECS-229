@@ -1,0 +1,125 @@
+#Use the MARS simulator to write and execute MIPS assembly code that will perform
+#the high level language pseudocode assignment statements.
+#Use this file as a base and perform each exercise in order according to the 
+#descriptions given in each comment.
+#No pseudoinstrucions are allowed, use only the following basic MIPS instructions:
+#	add	-	arithmetic add
+#	sub	-	arithmetic subtract
+#	and	-	bitwise and
+#	or	-	bitwise or
+#	slt	-	set on less than
+#	nor	-	bitwise nor
+#	addi	-	add with immediate data
+#	beq	-	branch if equal
+#	j	-	unconditional jump
+#
+#YOUR SUBMISSION WILL BE ASSIGNED A SCORE OF ZERO IF IT CONTAINS:
+#	PSEUDOINSTRUCTIONS
+#	SYNTAX ERRORS
+#	INSTRUCTIONS NOT LISTED ABOVE
+########################################
+
+########################################
+#Now for your assignment, complete the following exercises in order as they appear.
+#Each exercise is part of a larger program and is to be done in order!
+#The result of each exercise can depend on the result of previous exercises.
+
+#Variables A through F have the following register mapping:
+#	A:$10	B:$11	C:$12	D:$13	E:$14	F:$15
+#For temporary storage use register $1 through $9 as needed for complex operations.
+
+#The program will begin with the following register initializations
+addi $10, $0, 10	#A = 10
+addi $11, $0, 20	#B = 20
+addi $12, $0, 30	#C = 30
+addi $13, $0, 40	#D = 40
+addi $14, $0, 50	#E = 50
+addi $15, $0, 60	#F = 60
+
+#Example 1:
+#	if(A < B)
+#		F = B;
+#	else
+#		F = A;
+slt $1, $10,$11
+beq $1, $0, AnotlessB
+	add $15, $0, $11
+	j endif_example
+AnotlessB:
+	add $15, $0, $10
+endif_example:
+########################################
+#	Exercise 1:  if else statements
+#	if(F < A)
+#		F = F + 1;
+#	else if(F < B)
+#		F = F - 1;
+#	else
+#		F = 0x4444
+slt $1, $15, $10		# F < A
+beq $1, $0, NotLessA  
+	addi $15, $15, 1	# F = F + 1
+	j endIfElse_example
+NotLessA:
+	slt $2, $15, $11	# F < B
+	beq $2, $0, NotLessB
+	addi $3, $0, -1
+	sub $15, $15, $3	# F = F - 1
+	j endIfElse_example
+NotLessB:
+	addi $15, $0, 0x4444 	# F = 0x4444
+endIfElse_example:
+	
+
+########################################
+#Exercise 2:  for loop
+# for(A = 0; A < 5; A++)
+#	E = E + E;
+
+addi $10, $0, 0 	# A = 0
+addi $1, $0, 5		# temp = 5
+for_loop:
+	slt $2, $10, $1		# A < 5
+	beq $2, $0, end_for		
+		add $14, $14, $14	# E = E + E
+		addi $10, $10, 1	# A = A + 1
+		j for_loop
+end_for:
+
+########################################
+#Exercise 3: do while loop with nested if
+#	do{
+#		B += 2;
+#		if(B == C)
+#			B = B*2;
+#	}while(B < D)
+do_while:
+	addi $11, $11, 2	# B += 2
+	beq $11, $12 if_state
+	j out_of_if
+	if_state:
+		add $11, $11, $11 	# B = B * 2
+		j out_of_if
+	out_of_if:
+		slt $1, $13, $11	# B < D
+		beq $1, $0, do_while
+		j end_do_while
+end_do_while:
+
+
+########################################
+#Exercise 4:  while loop
+#	D = 0
+#	while( 5000 > C)
+#	{	D++;
+#		C +=C;
+#	}
+addi $13, $0, 0		# D = 0
+addi $1, $0, 5000	# temp = 5000
+begin_while:
+	slt $2, $12, $1		# C < 5000
+	beq $2, $0, end_while
+		addi $13, $13, 1	# D++
+		add $12, $12, $12	# C += C
+		j begin_while
+end_while:

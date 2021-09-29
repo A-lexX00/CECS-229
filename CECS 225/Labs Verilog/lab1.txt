@@ -1,0 +1,22 @@
+/* 
+Banh, Alex
+
+Lab 1
+
+CECS 225
+September 5, 2019
+*/
+`timescale 1ns/100ps
+
+module cout(input a,b,c,
+            output cout);
+  wire x, y, z;
+  
+  and
+  g1(x,a,b),
+  g2(y,a,c),
+  g3(z,b,c);
+  
+  or(cout,x,y,z);
+  
+endmodule

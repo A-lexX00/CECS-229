@@ -1,0 +1,44 @@
+/* 
+Banh, Alex
+
+Lab 0
+
+CECS 225
+August 27, 2019
+*/
+module adderTester;
+  reg [3:0] a, b;
+  wire [3:0] sum;
+  
+  adder4bit a4(a, b, sum);
+  
+  initial begin
+    $display("Testing 4-bit adder");
+    $display("Test case 1");
+    a = 4'b0011;
+    b = 4'b0010;
+    #1
+    $display("\tA = %b\tB = %b\tSUM = %b",a,b,sum);
+    #2
+    $display("Test case 2");
+    a = 4'b0100;
+    b = 4'b0110;
+    $display("\tA = %b\tB = %b\tSUM = %b",a,b,sum);
+    #3
+    $display("Test case 3");
+    a = 4'b1000;
+    b = 4'b0101;
+    $display("\tA = %b\tB = %b\tSUM = %b",a,b,sum);
+    #4
+    $display("Test case 4");
+    a = 4'b0011;
+    b = 4'b1100;
+    $display("\tA = %b\tB = %b\tSUM = %b",a,b,sum);
+    #5
+    $display("Test case 5");
+    a = 4'b0111;
+    b = 4'b1011;
+    $display("\tA = %b\tB = %b\tSUM = %b",a,b,sum);
+    $finish;
+  end
+endmodule

@@ -1,0 +1,36 @@
+`include "dffr.v"
+module moore1111000(input clk, a, reset, output [2:0] q, output z);
+  wire nota;
+  wire [2:0] notq, d;
+  wire [11:0]w;
+  
+  not
+  n0(nota, a),
+  n1(notq[0], q[0]),
+  n2(notq[1], q[1]),
+  n3(notq[2], q[2]);
+  
+  and
+  a0(w[0],q[2],notq[1],nota),
+  a1(w[1],q[2],notq[0],nota),
+  a2(w[2],q[2],notq[1],notq[0]),
+  a3(w[3],notq[2],q[1],q[0],a),
+  a4(w[4],q[2],q[1],notq[0],nota),
+  a5(w[5],notq[2],q[1],notq[0],a),
+  a6(w[6],notq[2],notq[1],q[0],a),
+  a7(w[7],q[2],notq[1],q[0],nota),
+  a8(w[8],q[2],q[1],notq[0]),
+  a9(w[9],notq[2],notq[0],a),
+  a10(w[10],q[2],q[0],a),
+  a11(z,q[0],q[1],q[2]);
+  
+  or
+  o0(d[2],w[0],w[1],w[2],w[3]),
+  o1(d[1],w[4],w[5],w[6],w[7]),
+  o2(d[0],w[1],w[8],w[9],w[10]);
+  
+  dffr
+  dff0(clk,d[2],reset,q[2]),
+  dff1(clk,d[1],reset,q[1]),
+  dff2(clk,d[0],reset,q[0]);
+endmodule
